@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.springframework.org/security/tags">
+<head>
+    <meta charset="UTF-8">
+    <title>Рабочая панель админа</title>
+</head>
+<body>
+
+<sec:authorize access="isAuthenticated()">
+    <h4><a href="/user">Профиль</a></h4>
+    <h4><a href="/logout">Выйти</a></h4>
+</sec:authorize>
+
+<div th:align="center">
+    <h2>Все пользователи</h2>
+</div>
+
+<div th:align="center">
+    <table th:border="1">
+        <tr>
+            <th>Id</th>
+            <th>Логин</th>
+            <th>Имя</th>
+            <th>Фамилия</th>
+            <th>Возраст</th>
+        </tr>
+
+        <tr th:each="user : ${users}">
+            <td th:text="${user.getId()}">Id</td>
+            <td th:text="${user.getUsername()}">Логин</td>
+            <td th:text="${user.getFirstName()}">Имя</td>
+            <td th:text="${user.getLastName()}">Фамилия</td>
+            <td th:text="${user.getAge()}">Возраст</td>
+
+            <td>
+                <form th:action="@{/admin/users/{id}(id=${user.id})}" th:object="${user}">
+                    <button type="submit">Открыть</button>
+                </form>
+            </td>
+
+            <td>
+                <form th:action="@{/admin/users/edit/{id}(id=${user.id})}" th:object="${user}">
+                    <button type="submit">Изменить</button>
+                </form>
+            </td>
+            <td>
+                <form th:action="@{/admin/users/delete(id=${user.id})}" th:object="${user}">
+                    <input type="hidden" name="id" th:value="${user.id}">
+                    <button type="submit">Удалить</button>
+                </form>
+            </td>
+        </tr>
+    </table>
+    <form th:action="@{/admin/users/addUser}">
+        <button type="submit">Добавить нового пользователя</button>
+    </form>
+</div>
+
+
+</body>
+</html>

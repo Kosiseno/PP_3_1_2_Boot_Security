@@ -1,34 +1,22 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org"
-      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity3" xmlns:c="http://java.sun.com/jsp/jstl/core">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Spring Security Example</title>
+    <meta charset="UTF-8">
+    <title>Изменить данные пользователя</title>
 </head>
 <body>
-<div>
-    <sec:authorize access="!isAuthenticated()">
-        <h1 th:inline="text">Hello, '[[${#httpServletRequest.remoteUser}]]'</h1>
-    </sec:authorize>
-
-
-    <div sec:authorize="hasRole('ROLE_ADMIN')">
-        <h4><a href="/admin">Панель админа</a></h4>
-    </div>
-
-    <sec:authorize access="isAuthenticated()">
-        <h4><a href="/logout">Выйти</a></h4>
-    </sec:authorize>
-
-
-
-</div>
-
+<h2>Изменить данные пользователя</h2>
 <div>
 
-    <form th:action="@{/user/edit}" th:object="${user}" method="post">
+    <form th:action="@{/admin/users/edit}" th:object="${user}" method="post">
         <input type="hidden" name="id" th:value="${user.getId()}">
         <fieldset>
             <legend>Данные пользователя</legend>
+            <p>
+                <label th:for="username">Логин</label>
+                <input type="text" name="username" th:id="username" th:value="${user.getUsername()}">
+            </p>
+            <p style="color:red" th:if="${#fields.hasErrors('username')}" th:errors="*{username}">username error</p>
             <p>
                 <label th:for="name">Имя</label>
                 <input type="text" name="firstName" th:id="firstName" th:value="${user.getFirstName()}">
@@ -45,18 +33,16 @@
             </p>
             <p style="color:red" th:if="${#fields.hasErrors('age')}" th:errors="*{age}">age error</p>
 
+
         </fieldset>
         <button type="submit">Изменить данные</button>
     </form>
 
 
     <br/>
+    <form th:action="@{/admin}">
+        <button type="submit">Назад к списку пользователей</button>
+    </form>
 </div>
-
-
-
-
-
-
 </body>
 </html>
