@@ -65,7 +65,7 @@ public class UserService implements UserDetailsService {
             return false;
         }
 
-        user.setRoles(Collections.singleton(new Role(2L, "ROLE_USER")));
+//        user.setRoles(Collections.singleton(new Role(2L, "ROLE_USER")));
         user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
         userRepository.save(user);
         return true;
@@ -80,8 +80,10 @@ public class UserService implements UserDetailsService {
     }
 
     public User editUser(User user) {
+        User injectUser = findUserById(user.getId());
+        user.setPassword(injectUser.getPassword());
+
         userRepository.save(user);
-        System.out.println("save user");
         return user;
     }
 
@@ -91,6 +93,10 @@ public class UserService implements UserDetailsService {
 
     public User findByUsername(String username) {
         return userRepository.findByUsername(username);
+    }
+
+    public List<Role> findAllRoles() {
+        return roleRepository.findAll();
     }
 
 }
