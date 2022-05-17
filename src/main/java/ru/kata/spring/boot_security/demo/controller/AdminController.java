@@ -22,40 +22,12 @@ public class AdminController {
         this.userService = userService;
     }
 
-    @GetMapping("/admin")
+    @GetMapping("/")
     public String getAdminPage(ModelMap modelMap, Model model) {
-        modelMap.addAttribute("users", userService.findAllUsers());
-        modelMap.addAttribute("rolesList", userService.findAllRoles());
-        model.addAttribute("user", new User());
-        return "admin";
+        return "index";
     }
-
-
-    @PostMapping("/admin/users/addUser")
-    public String addUser(@ModelAttribute("user") @Valid User user,
-                          BindingResult bindingResult) {
-        if (bindingResult.hasErrors())
-            return "/admin";
-        userService.addUser(user);
-        return "redirect:/admin";
+    @GetMapping("/all")
+    public String getTest(ModelMap modelMap, Model model) {
+        return "all";
     }
-
-
-
-    @PostMapping("/admin/{id}")
-    public String editUser(@ModelAttribute("user") User user) {
-        userService.editUser(user);
-        return "redirect:/admin";
-    }
-
-
-
-    @PostMapping("/admin/users/delete/{id}")
-    public String deleteUserById(@PathVariable("id") Long id) {
-        userService.deleteUser(id);
-        return "redirect:/admin";
-    }
-
-
-
 }

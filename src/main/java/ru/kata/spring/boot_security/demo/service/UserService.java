@@ -87,6 +87,7 @@ public class UserService implements UserDetailsService {
         return user;
     }
 
+    @Transactional
     public List<User> findAllUsers() {
         return userRepository.findAll();
     }
