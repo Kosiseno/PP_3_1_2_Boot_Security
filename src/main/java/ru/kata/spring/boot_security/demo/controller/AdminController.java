@@ -1,33 +1,35 @@
 package ru.kata.spring.boot_security.demo.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import ru.kata.spring.boot_security.demo.model.User;
-import ru.kata.spring.boot_security.demo.service.UserService;
+import ru.kata.spring.boot_security.demo.service.UserServiceImpl;
 
-import javax.validation.Valid;
+import javax.servlet.http.HttpServletRequest;
 
 @Controller
 public class AdminController {
 
-    private UserService userService;
+    private UserServiceImpl userService;
 
     @Autowired
-    public AdminController(UserService userService) {
+    public AdminController(UserServiceImpl userService) {
         this.userService = userService;
     }
 
-    @GetMapping("/")
-    public String getAdminPage(ModelMap modelMap, Model model) {
-        return "index";
-    }
     @GetMapping("/all")
     public String getTest(ModelMap modelMap, Model model) {
         return "all";
+    }
+
+    @GetMapping("/")
+    public String getSinglePage(HttpServletRequest httpServletRequest, Model model) {
+        model.addAttribute("user", userService.findByUsername(httpServletRequest.getUserPrincipal().getName()));
+        return "index";
     }
 }
